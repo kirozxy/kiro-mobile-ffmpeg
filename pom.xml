@@ -7,5 +7,5 @@
 	<groupId>com.github.kirozxy</groupId>
 	<artifactId>kiro-mobile-ffmpeg</artifactId>
 	<version>v1.0.0</version>
-	<packaging>aar</packaging>
+	<packaging>pom</packaging>
 </project>

@@ -1,2 +1,2 @@
 install:
-- mvn install:install-file -Dfile=releases/mobile-ffmpeg.aar -DpomFile=pom.xml -DgroupId=com.github.kirozxy -DartifactId=kiro-mobile-ffmpeg -Dversion=${VERSION:-v1.0.0} -Dpackaging=aar
+- mvn org.apache.maven.plugins:maven-install-plugin:3.1.2:install-file -Dfile=releases/mobile-ffmpeg.aar -DgroupId=com.github.kirozxy -DartifactId=kiro-mobile-ffmpeg -Dversion=${VERSION:-v1.0.0} -Dpackaging=aar -DgeneratePom=true

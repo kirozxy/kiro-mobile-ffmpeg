@@ -9,10 +9,10 @@ The project preserves the existing MobileFFmpeg Java API (`com.arthenica.mobilef
 | Item | Status |
 | --- | --- |
 | Base version | `v4.3.2-compact` |
-| Android AAR | `v1.0.0` |
+| Android AAR | `v1.0.1` |
 | Minimum Android API | 21 (Android 5.0) |
 | 16 KB memory page size | All 40 native binaries across four ABIs verified for 16 KB ELF alignment |
-| Maven/JitPack version | `v1.0.0` |
+| Maven/JitPack version | `v1.0.1` |
 
 ## Features
 
@@ -39,7 +39,7 @@ Add the dependency to your app module's `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.github.kirozxy:kiro-mobile-ffmpeg:v1.0.0'
+    implementation 'com.github.kirozxy:kiro-mobile-ffmpeg:v1.0.1'
 }
 ```
 

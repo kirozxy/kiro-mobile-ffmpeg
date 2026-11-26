@@ -56,7 +56,7 @@ def main():
             data = original.read(item)
             if item.filename == "AndroidManifest.xml":
                 data = re.sub(rb'android:minSdkVersion="[0-9]+"', b'android:minSdkVersion="21"', data)
-                data = re.sub(rb'android:versionName="[^"]+"', b'android:versionName="1.0.0"', data)
+                data = re.sub(rb'android:versionName="[^"]+"', b'android:versionName="1.0.1"', data)
             out.writestr(item, data)
         for name, data in sorted(native.items()):
             out.writestr(name, data)

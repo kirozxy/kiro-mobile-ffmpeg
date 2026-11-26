@@ -6,6 +6,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.kirozxy</groupId>
 	<artifactId>kiro-mobile-ffmpeg</artifactId>
-	<version>v1.0.0</version>
+	<version>v1.0.1</version>
 	<packaging>pom</packaging>
 </project>

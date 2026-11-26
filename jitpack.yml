@@ -1,3 +1,2 @@
 install:
-- FILE="-Dfile=releases/mobile-ffmpeg.aar"
-- mvn install:install-file $FILE -DgroupId=com.github.nikita36078 -DartifactId=mobile-ffmpeg -Dversion=4.3.3-compact -Dpackaging=aar -DgeneratePom=true
+- mvn install:install-file -Dfile=releases/mobile-ffmpeg.aar -DpomFile=pom.xml -DgroupId=com.github.kirozxy -DartifactId=kiro-mobile-ffmpeg -Dversion=${VERSION:-v1.0.0} -Dpackaging=aar

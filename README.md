@@ -2,31 +2,44 @@
 
 A maintained, compact Android FFmpeg library for kiroJ2ME, based on MobileFFmpeg `v4.3.2-compact`.
 
-The project preserves the existing MobileFFmpeg Java API (`com.arthenica.mobileffmpeg`) while preparing the native binaries for modern Android devices.
+The project preserves the existing MobileFFmpeg Java API (`com.arthenica.mobileffmpeg`) and rebuilds the compact native libraries with Android NDK r28 for 16 KB memory page sizes.
 
 ## Project status
 
 | Item | Status |
 | --- | --- |
 | Base version | `v4.3.2-compact` |
-| Android AAR | Included in `releases/` |
-| 16 KB memory page size | Planned; the current native binaries are 4 KB-aligned |
-| New Maven/JitPack release | Not yet published |
+| Android AAR | `v1.0.0` |
+| Minimum Android API | 21 (Android 5.0) |
+| 16 KB memory page size | All 40 native binaries across four ABIs verified for 16 KB ELF alignment |
+| Maven/JitPack version | `v1.0.0` |
 
 ## Features
 
 - FFmpeg and FFprobe APIs for media processing and metadata inspection.
-- Compact Android package for audio and video conversion.
+- Compact Android package for converting IMA WAV and Yamaha MMF ADPCM audio to unsigned 8-bit PCM WAV.
 - Native libraries for `arm64-v8a`, `armeabi-v7a`, `x86`, and `x86_64`.
 - Compatible with existing MobileFFmpeg Java imports.
 
 ## Use in an Android project
 
-The existing AAR is available at [`releases/mobile-ffmpeg.aar`](releases/mobile-ffmpeg.aar). Copy it into your app module's `libs` directory and add the dependency to `app/build.gradle`:
+Add JitPack to your project's `settings.gradle`:
+
+```groovy
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+Add the dependency to your app module's `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation files('libs/mobile-ffmpeg.aar')
+    implementation 'com.github.kirozxy:kiro-mobile-ffmpeg:v1.0.0'
 }
 ```
 
@@ -36,13 +49,13 @@ Example:
 import com.arthenica.mobileffmpeg.Config;
 import com.arthenica.mobileffmpeg.FFmpeg;
 
-int result = FFmpeg.execute(new String[]{"-i", inputPath, "-vn", outputPath});
+int result = FFmpeg.execute(new String[]{"-i", inputPath, "-acodec", "pcm_u8", "-ar", "16000", outputPath});
 if (result == Config.RETURN_CODE_SUCCESS) {
     // Conversion completed successfully.
 }
 ```
 
-> The bundled AAR is the legacy build. Do not use it as a 16 KB-compatible release.
+The AAR contains the rebuilt native libraries and retains the original Java classes and API. The host app must also use a compatible Android Gradle Plugin and 16 KB-compatible native dependencies.
 
 ## Source and build
 
@@ -54,14 +67,19 @@ if (result == Config.RETURN_CODE_SUCCESS) {
 | [`releases/`](releases/) | Prebuilt Android archive |
 | [`docs/`](docs/) | Existing MobileFFmpeg documentation |
 
-The original Android build entry point is `android.sh`. It requires a Unix-like shell, Android SDK, Android NDK and native build tools. See the [MobileFFmpeg Android build documentation](https://github.com/tanersener/mobile-ffmpeg/wiki/android.sh) for options. Modern NDK compatibility and 16 KB alignment are part of the planned update.
+### Rebuild the compact 16 KB AAR
 
-## Roadmap
+Use Android NDK r28 or newer, Bash, GNU Make, Python 3, and standard Unix build utilities. This build path also works on Windows with Git Bash and an MSYS-compatible GNU Make on `PATH`.
 
-- Modernize the Android native build configuration.
-- Rebuild FFmpeg and JNI libraries with 16 KB ELF alignment.
-- Verify the resulting AAR on supported Android architectures.
-- Publish a compatible release for use in kiroJ2ME.
+```bash
+export ANDROID_NDK_ROOT=/path/to/android-sdk/ndk/28.2.13676358
+JOBS=8 bash build/android-compact-16kb.sh
+python3 build/package-compact-16kb.py
+```
+
+The script builds the native libraries for all four ABIs, explicitly links with a 16 KB maximum and common page size, and keeps the compact codec configuration. The packaging script verifies the ELF load segments before producing `.native-build/mobile-ffmpeg.aar`. To build just one ABI, pass its name to the shell script. The existing `android.sh` is the original legacy build entry point; use the commands above for the compact build.
+
+The Android CPU features compatibility source in `android/jni/cpufeatures/` comes from NDK r22, including its original notice, because it is no longer shipped by NDK r28.
 
 ## Credits and license
 
